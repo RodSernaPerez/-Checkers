@@ -3,10 +3,17 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.util.Date;
 
+import agents.Player;
+import agents.SuperPlayer;
+
+import constants.*;
+import gameElements.*;
+
 /**
  * Starts the game for one client.
  * 
  * Note:
+ *    Use SuperPlayer / RandomPlayer to choose agent
  * 		Use the verbose flag for outputting game information.
  * 		Use the fast flag for using 100ms move deadline instead of 1000ms.
  * 		Use the init flag if you want this client to initialise the game, that
@@ -20,6 +27,8 @@ public class Main {
     boolean init = false;
     boolean verbose = false;
     boolean fast = false;
+    String agent = "";
+
 
     for (int i = 0; i < args.length; ++i) {
       String param = args[i];
@@ -30,10 +39,16 @@ public class Main {
         verbose = true;
       } else if (param.equals("fast") || param.equals("f")) {
         fast = true;
+      } else if (param.equals("SuperPlayer") || param.equals("RandomPlayer") || param.equals("DummyPlayer") || param.equals("InteligentPlayer"))  {
+          agent = param;
       } else {
         System.err.println("Unknown parameter: '" + args[i] + "'");
         return;
       }
+    }
+    if (agent == "" ){
+      System.err.println("No agent choosen");
+      return;
     }
 
     /**
@@ -46,13 +61,23 @@ public class Main {
       System.out.println(message);
     }
 
-    Player player = new Player();
+
+    Player player = null;
+    try {
+
+      player = (Player) Class.forName("agents."+agent).newInstance();
+    }
+    catch (Exception e){
+      System.err.println("The agent is not available: " + e.toString());
+      return;
+    }
+
 
     String input_message;
     BufferedReader br = new BufferedReader(new InputStreamReader(System.in));
     while ((input_message = br.readLine()) != null) {
       /* Deadline is one second from when we receive the message */
-      Deadline deadline = new Deadline(Deadline.getCpuTime() + (fast ? (long) 1e8 : (long) 1e9));
+      Deadline deadline = new Deadline(Deadline.getCpuTime() +(fast ? (long) 1e8 : (long) 1e9));
 
       /* Get game state from standard input */
       //System.err.println("Receiving: '" + input_message + "'");

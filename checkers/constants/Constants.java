@@ -1,6 +1,7 @@
 /**
  * Contains all the constants needed among all classes.
  */
+package constants;
 public class Constants {
   /**
    * These definitions are used in the contents of squares in CBoard.
@@ -41,8 +42,8 @@ public class Constants {
       "⛀ ", // CELL_WHITE
       "? ", // Unused
       "? ", // Unused
-      "R ", // CELL_RED | CELL_KING
-      "W ", // CELL_WHITE | CELL_KING
+      "⛃ ", // CELL_RED | CELL_KING
+      "X ", // CELL_WHITE | CELL_KING
       "? ", // Unused
       "  ", // CELL_INVALID
   };
@@ -58,7 +59,7 @@ public class Constants {
       "? ", // Unused
       "? ", // Unused
       "\u001B[31m⛃ \u001B[0m", // CELL_RED | CELL_KING
-      "W ", // CELL_WHITE | CELL_KING
+      "Y ", // CELL_WHITE | CELL_KING
       "? ", // Unused
       "  ", // CELL_INVALID
   };

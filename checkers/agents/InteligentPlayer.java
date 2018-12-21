@@ -1,9 +1,12 @@
+package agents;
 import java.util.*;
 import java.lang.Math;
+import gameElements.*;
+import constants.Constants;
 
-public class Player3 
-{
-    int pointsfinal=100;
+public class InteligentPlayer implements Player {
+
+    int pointsfinal=1000;
     int infinite=10000;
     /**
      * Performs a move
@@ -15,7 +18,7 @@ public class Player3
      * @return the next state the board is in after our move
      */
 
-    //This plays minimax without alphabeta and with a fixed depth
+    //This plays minimax,alpha-beta and a variable depth depending on the number of pieces 
     public GameState play(final GameState pState, final Deadline pDue) {
 
         Vector<GameState> lNextStates = new Vector<GameState>();
@@ -26,11 +29,33 @@ public class Player3
             return new GameState(pState, new Move());
         }
 
- 
-        GameState gs=minimax(pState,5);
+        int number_pieces=0;
+        // Counts pieces and queens
+        for (int i = 0; i < 32; i++) {
+            if (0 != (pState.get(i) & Constants.CELL_RED))
+            {
+                number_pieces++;
+            }
+            else if (0 != (pState.get(i) & Constants.CELL_WHITE))
+            {
+                number_pieces++;
+            } 
+        }
+        
+        int depth;
+        if (number_pieces<4)
+            depth=12;
+        else
+            depth=8;
+
+
+        GameState gs=minimaxab(pState,depth);
+        
         return gs;
+    
     }
 
+    
     int heuristic(GameState pState, int player)
     {        
         int red_pieces = 0;
@@ -110,10 +135,11 @@ public class Player3
            return -valor;
         }
     }
-
     
-    int minimax(GameState pState, int depth,int it,int player)
+    int minimaxab(GameState pState, int depth,int it,int player,int prevalpha,int prevbeta)
     {
+        int alpha=new Integer(prevalpha);
+        int beta=new Integer(prevbeta);
 
         Vector<GameState> lNextStates = new Vector<GameState>();
         pState.findPossibleMoves(lNextStates);
@@ -133,7 +159,7 @@ public class Player3
             else
                 return -pointsfinal;
         }
-        
+
         
         //If it is no possible to make more moves
         if(lNextStates.isEmpty())
@@ -142,9 +168,9 @@ public class Player3
                 return pointsfinal;
             else //Max
                 return -pointsfinal;
-            
-            //System.out.println("Final de partida en nivel :"+it+ "de "+valorfin);
         }
+            
+            
 
         //If it is a draw
         if(pState.getMovesUntilDraw()==0)
@@ -154,31 +180,33 @@ public class Player3
         if(it!=depth)
         {
 
-            int value;
-             
+            
             if(it%2==1)//MIN
             {
-                value=infinite;//infinite
+                
                 for (GameState g : lNextStates) 
                 {
-                    int newvalue=minimax(g,depth,it+1,player);
-
-                    if(newvalue<value)
-                        value=newvalue;
+                    int value=minimaxab(g,depth,it+1,player,alpha,beta);
+                    beta=Math.min(beta,value);
+                    if(beta<=alpha)
+                        break; 
                 }
+                return beta;
             }
             else //MAX
             {
-                value=-infinite;//- inifinite
+               
                 for (GameState g : lNextStates ) 
                 {
-                    int newvalue=minimax(g,depth,it+1,player);
-
-                    if(newvalue>value)
-                        value=newvalue;
+                    int value=minimaxab(g,depth,it+1,player,alpha,beta);
+                    alpha=Math.max(alpha,value);
+                    if(beta<=alpha)
+                        break;   
                 }
+
+                return alpha;
             }  
-            return value;         
+        
         }
         else
         {
@@ -188,9 +216,7 @@ public class Player3
         }
     }
 
-
-    //Level 0
-    GameState minimax(GameState pState,int depth)
+    GameState minimaxab(GameState pState,int depth)
     {
         //Gets the possible moves
         Vector<GameState> lNextStates = new Vector<GameState>();
@@ -199,16 +225,19 @@ public class Player3
         //Gets the colour of the agent
         int player=pState.getNextPlayer();
 
-        //heuristic(pState,player);
+
 
         //Starts the minimax algorithm
         GameState nextState=new GameState();
         int value=-infinite;//- infinite
 
+        int alpha=-infinite;
+        int beta=infinite;
         for (GameState gs : lNextStates ) 
         {
-           // ArrayList lista=new ArrayList();
-            int newvalue=minimax(gs,depth,1,player);
+            int newvalue=minimaxab(gs,depth,1,player,alpha,beta);
+            alpha=Math.max(alpha,newvalue);
+
             if(newvalue>value) 
             {
                 value=newvalue;

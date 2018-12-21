@@ -1,0 +1,38 @@
+# Checkers players in Java
+
+# 4 types of players
+#	- RandomPlayer: plays randomly
+# 	- DummyPlayer: uses minimax with fixed depth of 5
+#	- InteligentPlayer: uses minimax and alpha-beta pruning, with a variable depth
+# 		if number_of_checkers < 4
+# 			Depth = 12
+# 		else
+# 			Depth = 8
+#	- SuperPlayer: uses the lasting time to perform a movement as deep as possible,
+#				with minimax and alpha-beta pruning
+
+# 1 second to play
+
+
+# Compile
+javac *.java
+
+# Run
+# The players use standard input and output to communicate
+# The Moves made are shown as unicode-art on std err if the parameter verbose is given
+
+# Play against self in same terminal
+mkfifo pipe
+java Main <tag_player> init verbose < pipe | java Main  <tag_player>  > pipe
+
+# Play against self in two different terminals
+# Terminal 1:
+mkfifo pipe1 pipe2
+java Main <tag_player>  init verbose < pipe1 > pipe2
+
+# Terminal 2:
+java Main <tag_player>  verbose > pipe1 < pipe2
+
+# To play two different agents against each other, you can use the classpath argument
+java -classpath <path> Main  <tag_player>  init verbose < pipe | java -classpath <path> Main <tag_player>  > pipe
+

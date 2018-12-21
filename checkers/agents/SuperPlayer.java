@@ -1,10 +1,12 @@
+package agents;
 import java.util.*;
 import java.lang.Math;
 import java.awt.event.*;
 import javax.swing.Timer;
+import gameElements.*;
+import constants.Constants;
 
-
-public class Player {
+public class SuperPlayer implements Player{
 
     int pointsfinal=1000;
     int infinite=10000;
@@ -64,8 +66,10 @@ public class Player {
     }
 
     
-    int heuristic(GameState pState, int player)
-    {        
+    int heuristic(GameState pState, int player){
+    /*
+    Assigns a score to a GameState
+    */        
         int red_pieces = 0;
         int white_pieces = 0;
         int red_queens = 0;

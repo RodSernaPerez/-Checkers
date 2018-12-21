@@ -1,6 +1,10 @@
+package agents;
 import java.util.*;
+import java.lang.Math;
+import gameElements.*;
+import constants.Constants;
 
-public class Player {
+public class RandomPlayer implements Player{
     /**
      * Performs a move
      *
@@ -10,6 +14,8 @@ public class Player {
      *            time before which we must have returned
      * @return the next state the board is in after our move
      */
+
+    //It plays randomly
     public GameState play(final GameState pState, final Deadline pDue) {
 
         Vector<GameState> lNextStates = new Vector<GameState>();
@@ -24,7 +30,11 @@ public class Player {
          * Here you should write your algorithms to get the best next move, i.e.
          * the best next state. This skeleton returns a random move instead.
          */
+
         Random random = new Random();
         return lNextStates.elementAt(random.nextInt(lNextStates.size()));
+  
     }
+
+    
 }

@@ -1,6 +1,7 @@
+package gameElements;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
+import constants.*;
 /**
  * Represents a game state with a 8x8 checkers board.
  *
@@ -86,6 +87,7 @@ public class GameState {
     int moves_left;
 
     board = st.nextToken();
+
     last_move = st.nextToken();
     next_player = st.nextToken();
     moves_left = Integer.parseInt(st.nextToken());
@@ -200,7 +202,7 @@ public class GameState {
    *
    *   (lBoard.At(23)&CELL_KING)
    */
-  int get(int pPos) {
+  public int get(int pPos) {
   	/* Sanity checks. If any of these fail, something has gone horribly
      * wrong. */
     assert(pPos >= 0);
@@ -234,7 +236,7 @@ public class GameState {
    *
    * You can use it in the same way as the version that requires a cell index
    */
-  int get(int pR, int pC) {
+  public int get(int pR, int pC) {
     if (pR < 0 || pR > 7 || pC < 0 || pC > 7) {
       return Constants.CELL_INVALID;
     }
@@ -439,7 +441,7 @@ public class GameState {
    *
    * @param pStates the current game state
    */
-  void findPossibleMoves(Vector<GameState> pStates) {
+  public  void findPossibleMoves(Vector<GameState> pStates) {
     pStates.clear();
 
     if (mLastMove.isEOG()) {
@@ -709,7 +711,7 @@ public class GameState {
   /**
    * Gets number of moves until draw.
    */
-  final int getMovesUntilDraw() {
+  public final int getMovesUntilDraw() {
     return this.mMovesUntilDraw;
   }
 

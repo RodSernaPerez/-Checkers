@@ -1,6 +1,6 @@
+package gameElements;
 import java.util.StringTokenizer;
 import java.util.Vector;
-
 /**
  * Represents a move.
  *

@@ -1,6 +1,6 @@
+package gameElements;
 import java.lang.management.ManagementFactory;
 import java.lang.management.ThreadMXBean;
-
 /**
  * Represents a deadline for the player to make their move.
  */
@@ -30,7 +30,7 @@ public class Deadline {
    * Calculates and returns the remaining time until the Deadline must be met,
    * in nanoseconds.
    */
-  long timeUntil() {
+  public long timeUntil() {
     return deadline - Deadline.getCpuTime();
   }
 }
